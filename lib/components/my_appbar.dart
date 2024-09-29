@@ -34,6 +34,7 @@ class MyAppBar extends StatelessWidget {
         greetingMessage = "Good Evening";
       }
     }
+
     _setGreetingMessage();
 
     void _setFormattedDateTime() {
@@ -56,29 +57,30 @@ class MyAppBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-    Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "$greetingMessage,\n${authController.user.name}!",
-            style: GoogleFonts.roboto(
-                fontSize: 35,
-                fontWeight: FontWeight.w600,
-                color: Colors.white),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "$greetingMessage,\n${authController.user.name}!",
+                style: GoogleFonts.roboto(
+                    fontSize: 35,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                formattedDateTime,
+                style: GoogleFonts.roboto(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white70, // Slightly lighter text for date/time
+                ),
+              ),
+            ],
           ),
-        SizedBox(height: 5,),
-        Text(
-          formattedDateTime,
-          style: GoogleFonts.roboto(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-            color: Colors.white70, // Slightly lighter text for date/time
-          ),
-        ),
-      ],
-    ),
-
           InkWell(
             onTap: () {
               showDialog(
@@ -111,23 +113,6 @@ class MyAppBar extends StatelessWidget {
               ),
             ),
           )
-
-          // GestureDetector(
-          //   onTap: onSearchTap,
-          //   child: Container(
-          //     padding: EdgeInsets.all(12),
-          //     decoration: BoxDecoration(
-          //       border: Border.all(color: Colors.white),
-          //       borderRadius: BorderRadius.circular(16),
-          //       color: Colors.grey[200],
-          //     ),
-          //     child: Icon(
-          //       Icons.search,
-          //       size: 36,
-          //       color: Colors.grey[800],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );

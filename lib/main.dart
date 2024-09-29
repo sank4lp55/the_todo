@@ -6,11 +6,11 @@ import 'package:the_todo/controllers/auth_controller.dart';
 import 'package:the_todo/controllers/namescreen_controller.dart';
 import 'package:the_todo/controllers/select_avatar_controller.dart';
 import 'package:the_todo/select_avatar_screen.dart';
+import 'package:the_todo/splash_screen.dart';
 
 import 'controllers/manager_controller.dart';
 import 'homescreen.dart';
 import 'name_screen.dart';
-
 
 Future<void> main() async {
   //initialize hive
@@ -21,14 +21,17 @@ Future<void> main() async {
 
   //open box
   var box = await Hive.openBox("myBox");
+  print(box);
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthController()),
         ChangeNotifierProvider(create: (_) => NamescreenController()),
-        ChangeNotifierProvider(create: (_) => SelectAvatarController()),  // Provide OnboardingController
-        ChangeNotifierProvider(create: (_) => TodoProvider()),  // Provide another TodoProvider
+        ChangeNotifierProvider(create: (_) => SelectAvatarController()),
+        // Provide OnboardingController
+        ChangeNotifierProvider(create: (_) => TodoProvider()),
+        // Provide another TodoProvider
         // Add more providers if needed
       ],
       child: MyApp(),
@@ -44,7 +47,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.lime),
-      home: NameScreen(),
+      home: SplashScreen(),
     );
   }
 }

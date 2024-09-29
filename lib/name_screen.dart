@@ -27,6 +27,7 @@ class _NameScreenState extends State<NameScreen> {
     final namescreenController = Provider.of<NamescreenController>(context);
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+    print(namescreenController.isFieldEmpty);
     return Scaffold(
       backgroundColor: const Color(0xff1C1C1C),
       body: Center(
@@ -34,6 +35,19 @@ class _NameScreenState extends State<NameScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(flex: 1),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: InkWell(
+                child: Container(
+                  child: Image.asset(
+                    "lib/images/img_8.png",
+                    fit: BoxFit.cover,
+                    width: 250, // Set your desired width
+                    // height: 100, // Set your desired height
+                  ),
+                ),
+              ),
+            ),
             Container(
               child: Text(
                 "Enter your Name",
@@ -44,21 +58,9 @@ class _NameScreenState extends State<NameScreen> {
               ),
             ),
             // SizedBox(height: 15,),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: InkWell(
-                child: Container(
-                  child: Image.asset(
-                    "lib/images/img.png",
-                    fit: BoxFit.cover,
-                    width: 100, // Set your desired width
-                    // height: 100, // Set your desired height
-                  ),
-                ),
-              ),
-            ),
+
             const SizedBox(
-              height: 15,
+              height: 20,
             ),
             CustomTextField(
               controller: _controller,

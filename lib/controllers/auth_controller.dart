@@ -12,49 +12,52 @@ class AuthController with ChangeNotifier {
 
   ToDoDatabase db = ToDoDatabase();
   List toDoList = [];
-  User user=User();
+  User user = User();
 
   AuthController() {
-    // loadInitialData(); // Load initial data when the provider is created
-  }
-
-  void createUser({required String name,required String avatar}) {
-    if (_myBox.get("USER") == null) {
-      create(name: name,avatar: avatar);
-    } else {
-      //already exist data
-      create(name: name,avatar: avatar);
+    if (_myBox.get("USER") != null) {
       loadData();
     }
   }
 
-  void create({required String name,required String avatar}) {
-    db.user=User(name: name,avatar: avatar);
+  void createUser({required String name, required String avatar}) {
+    if (_myBox.get("USER") == null) {
+      create(name: name, avatar: avatar);
+    } else {
+      //already exist data
+      create(name: name, avatar: avatar);
+      loadData();
+    }
+  }
+
+  void create({required String name, required String avatar}) {
+    db.user = User(name: name, avatar: avatar);
     db.updateData("USER"); // Update the data in the database
-    user=db.user;
+    user = db.user;
     notifyListeners();
   }
 
   void loadData() {
     db.loadData();
-    user=db.user;
+    user = db.user;
     notifyListeners();
   }
 
-  void checkBoxTapped({bool? value, int index=1}) {
-    db.toDoList[index][1] = !db.toDoList[index][1]; // Toggle the completed state
+  void checkBoxTapped({bool? value, int index = 1}) {
+    db.toDoList[index][1] =
+        !db.toDoList[index][1]; // Toggle the completed state
     db.updateData("USER"); // Update the data in the database
-    toDoList=db.toDoList;
+    toDoList = db.toDoList;
     notifyListeners(); // Notify listeners about the change
   }
 
   void onSave(String taskText, BuildContext context) {
     db.toDoList.add([taskText, false]); // Add new task
     db.updateData("USER"); // Update the data in the database
-    toDoList=db.toDoList;
+    toDoList = db.toDoList;
     notifyListeners(); // Notify listeners about the change
     Navigator.of(context).pop(); // Close the dialog
-    Fluttertoast.showToast(msg:"Task added to the list!");
+    Fluttertoast.showToast(msg: "Task added to the list!");
   }
 
   void createNewTask(BuildContext context) {
@@ -74,7 +77,7 @@ class AuthController with ChangeNotifier {
   void deleteTask(int index) {
     db.toDoList.removeAt(index); // Remove the task
     db.updateData("USER"); // Update the data in the database
-    toDoList=db.toDoList;
+    toDoList = db.toDoList;
     notifyListeners(); // Notify listeners about the change
   }
 }
