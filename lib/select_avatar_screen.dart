@@ -9,10 +9,8 @@ import 'package:provider/provider.dart';
 
 import 'controllers/select_avatar_controller.dart';
 
-
 class SelectAvatarScreen extends StatefulWidget {
   final String name;
-
 
   const SelectAvatarScreen({super.key, required this.name});
 
@@ -48,18 +46,25 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
           ),
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 16.0), // Add some padding to the right
+              padding: const EdgeInsets.only(right: 16.0),
+              // Add some padding to the right
               child: GestureDetector(
                 onTap: () {
                   // Action when 'Skip' is pressed
                   print('Skip pressed');
-                  authController.createUser(name: "",avatar: "lib/images/img_5.png");
+                  authController.createUser(
+                      name: widget.name,
+                      avatar: selectAvatarController.avatarUrl != ""
+                          ? selectAvatarController.avatarUrl
+                          : "lib/images/img_5.png");
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Homescreen(), // The screen to navigate to
+                      builder: (context) =>
+                          Homescreen(), // The screen to navigate to
                     ),
-                        (Route<dynamic> route) => false, // This condition removes all routes from the stack
+                    (Route<dynamic> route) =>
+                        false, // This condition removes all routes from the stack
                   );
                 },
                 child: Center(
@@ -107,15 +112,20 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
                 ],
               ),
               Spacer(flex: 1),
-              FadeInButtonDemo(isVisible: selectAvatarController.index > -1,
-                onTap: (){
-                  authController.createUser(name: widget.name,avatar: selectAvatarController.avatarUrl);
+              FadeInButtonDemo(
+                isVisible: selectAvatarController.index > -1,
+                onTap: () {
+                  authController.createUser(
+                      name: widget.name,
+                      avatar: selectAvatarController.avatarUrl);
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Homescreen(), // The screen to navigate to
+                      builder: (context) =>
+                          Homescreen(), // The screen to navigate to
                     ),
-                        (Route<dynamic> route) => false, // This condition removes all routes from the stack
+                    (Route<dynamic> route) =>
+                        false, // This condition removes all routes from the stack
                   );
                 },
               ),
@@ -145,7 +155,6 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
       child: InkWell(
         borderRadius: BorderRadius.circular((w / 2 - 60) / 2),
         onTap: () {
-
           print(image);
           selectAvatarController.setIndex(index: index);
           if (kDebugMode) {
@@ -158,7 +167,9 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: selectAvatarController.index == index ? Colors.greenAccent : Colors.grey[700]!,
+              color: selectAvatarController.index == index
+                  ? Colors.greenAccent
+                  : Colors.grey[700]!,
               width: 1.0, // You can adjust the width as needed
             ),
           ),

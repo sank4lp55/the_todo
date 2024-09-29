@@ -23,6 +23,7 @@ class AuthController with ChangeNotifier {
       create(name: name,avatar: avatar);
     } else {
       //already exist data
+      create(name: name,avatar: avatar);
       loadData();
     }
   }

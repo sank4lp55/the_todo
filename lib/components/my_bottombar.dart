@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:the_todo/components/profile_dialog.dart';
 
+import '../controllers/auth_controller.dart';
 import '../controllers/manager_controller.dart';
 import '../input_task_screen.dart';
 
@@ -17,6 +19,7 @@ class MyBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todoProvider = Provider.of<TodoProvider>(context);
+    final authController = Provider.of<AuthController>(context);
     return BottomNavigationBar(
       currentIndex: index,
       onTap: (selectedIndex) {
@@ -30,9 +33,14 @@ class MyBottomBar extends StatelessWidget {
         }
         else if (selectedIndex == 2) {
           print("Right icon tapped");
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => InputTaskScreen()),
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ProfileDialog(
+                avatarImagePath: authController.user.avatar!,
+                name: authController.user.name!,
+              );
+            },
           );
 
         } else {

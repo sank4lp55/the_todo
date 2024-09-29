@@ -4,7 +4,7 @@ import '../data/database.dart';
 
 class SelectAvatarController with ChangeNotifier {
   int _index = -1;
-  String _avatarUrl = "lib/images/img_5.png";
+  String _avatarUrl = "";
 
   // Getter for index
   int get index => _index;

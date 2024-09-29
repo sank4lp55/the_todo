@@ -64,7 +64,7 @@ class _TaskScreenState extends State<TaskScreen> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              padding: const EdgeInsets.fromLTRB(0,10,0,5),
               child: Text(
                 widget.task,
                 style: const TextStyle(
@@ -78,7 +78,7 @@ class _TaskScreenState extends State<TaskScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: Text(
-                widget.date,
+                "Deadline: ${widget.date}",
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
