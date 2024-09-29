@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../data/database.dart';
 
-class OnboardingController with ChangeNotifier {
-  int _index = -1;
+class NamescreenController with ChangeNotifier {
+  bool _isFieldEmpty=true;
 
   // Getter for count
-  int get index => _index;
+  bool get isFieldEmpty => _isFieldEmpty;
 
   // Setter for count
-  set index(int newIndex) {
-    _index = newIndex;
+  set isFieldEmpty(bool isFieldEmpty) {
+    _isFieldEmpty = isFieldEmpty;
     notifyListeners();  // Notify listeners when the value changes
   }
 
-  OnboardingController() {
+  NamescreenController() {
     // loadInitialData(); // Load initial data when the provider is created
   }
-  void setIndex({required int index}){
-    this.index=index;
+  void setIsFieldEmpty({required bool isFieldEmpty}){
+    this.isFieldEmpty=isFieldEmpty;
   }
 }
