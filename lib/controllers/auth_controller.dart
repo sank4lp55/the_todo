@@ -1,52 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:the_todo/Models/user_model.dart';
 
 import '../data/database.dart';
 import '../utils/dialog_box.dart';
 
-class TodoProvider with ChangeNotifier {
+class AuthController with ChangeNotifier {
   //reference the hive box
   final _myBox = Hive.box("myBox");
 
   ToDoDatabase db = ToDoDatabase();
   List toDoList = [];
+  User user=User();
 
-  TodoProvider() {
-    loadInitialData(); // Load initial data when the provider is created
+  AuthController() {
+    // loadInitialData(); // Load initial data when the provider is created
   }
 
-  void loadInitialData() {
-    if (_myBox.get("TODOLIST") == null) {
-      createInitialData();
+  void createUser({required String name,required String avatar}) {
+    if (_myBox.get("USER") == null) {
+      create(name: name,avatar: avatar);
     } else {
       //already exist data
       loadData();
     }
   }
 
-  void createInitialData() {
-    db.createInitialData();
-    toDoList=db.toDoList;
+  void create({required String name,required String avatar}) {
+    db.user=User(name: name,avatar: avatar);
+    db.updateData("USER"); // Update the data in the database
+    user=db.user;
     notifyListeners();
   }
 
   void loadData() {
-   db.loadData();
-   toDoList=db.toDoList;
+    db.loadData();
+    user=db.user;
     notifyListeners();
   }
 
   void checkBoxTapped({bool? value, int index=1}) {
     db.toDoList[index][1] = !db.toDoList[index][1]; // Toggle the completed state
-    db.updateData("TODOLIST"); // Update the data in the database
+    db.updateData("USER"); // Update the data in the database
     toDoList=db.toDoList;
     notifyListeners(); // Notify listeners about the change
   }
 
   void onSave(String taskText, BuildContext context) {
     db.toDoList.add([taskText, false]); // Add new task
-    db.updateData("TODOLIST"); // Update the data in the database
+    db.updateData("USER"); // Update the data in the database
     toDoList=db.toDoList;
     notifyListeners(); // Notify listeners about the change
     Navigator.of(context).pop(); // Close the dialog
@@ -69,7 +72,7 @@ class TodoProvider with ChangeNotifier {
 
   void deleteTask(int index) {
     db.toDoList.removeAt(index); // Remove the task
-    db.updateData("TODOLIST"); // Update the data in the database
+    db.updateData("USER"); // Update the data in the database
     toDoList=db.toDoList;
     notifyListeners(); // Notify listeners about the change
   }

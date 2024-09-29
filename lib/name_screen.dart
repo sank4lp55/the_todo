@@ -20,6 +20,7 @@ class NameScreen extends StatefulWidget {
 class _NameScreenState extends State<NameScreen> {
   bool _isVisible = false;
   int selectedAvatar = -1;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,36 +28,6 @@ class _NameScreenState extends State<NameScreen> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: const Color(0xff1C1C1C),
-      //   leading: const Icon(
-      //     Icons.arrow_back_ios,
-      //     color: Colors.white,
-      //   ),
-      //   actions: [
-      //     Padding(
-      //       padding: const EdgeInsets.only(right: 16.0),
-      //       // Add some padding to the right
-      //       child: GestureDetector(
-      //         onTap: () {
-      //           // Action when 'Skip' is pressed
-      //           print('Skip pressed');
-      //           // Navigate to another screen or perform any other action
-      //         },
-      //         child: Center(
-      //           child: Text(
-      //             'Skip',
-      //             style: GoogleFonts.montserrat(
-      //               fontSize: 15,
-      //               fontWeight: FontWeight.w600,
-      //               color: Colors.white,
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
       backgroundColor: const Color(0xff1C1C1C),
       body: Center(
         child: Column(
@@ -90,6 +61,7 @@ class _NameScreenState extends State<NameScreen> {
               height: 15,
             ),
             CustomTextField(
+              controller: _controller,
               onTextChanged: (text) {
                 print('Current text: $text');
                 if (text.isNotEmpty) {
@@ -108,11 +80,13 @@ class _NameScreenState extends State<NameScreen> {
             FadeInButtonDemo(
               title: "Next",
               isVisible: !(namescreenController.isFieldEmpty),
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SelectAvatarScreen(), // Specify the screen to navigate to
+                    builder: (context) => SelectAvatarScreen(
+                      name: _controller.text,
+                    ), // Specify the screen to navigate to
                   ),
                 );
               },

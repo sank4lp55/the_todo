@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/manager_controller.dart';
+import '../input_task_screen.dart';
 
 class MyBottomBar extends StatelessWidget {
   final int index;
@@ -21,7 +22,19 @@ class MyBottomBar extends StatelessWidget {
       onTap: (selectedIndex) {
         if (selectedIndex == 1) {
           print("Center icon tapped");
-          todoProvider.createNewTask(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InputTaskScreen()),
+          );
+
+        }
+        else if (selectedIndex == 2) {
+          print("Right icon tapped");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InputTaskScreen()),
+          );
+
         } else {
           onTap(selectedIndex);
         }

@@ -1,6 +1,9 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 
+import '../controllers/auth_controller.dart';
+import 'package:provider/provider.dart';
+
 class MyAppBar extends StatelessWidget {
   final String title;
   VoidCallback onSearchTap;
@@ -13,6 +16,7 @@ class MyAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authController = Provider.of<AuthController>(context);
     return Padding(
       padding: const EdgeInsets.all(25.0),
       child: Row(
@@ -20,7 +24,7 @@ class MyAppBar extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              "Good Morning,\nDimitar!",
+              "Good Morning,\n${authController.user.name}!",
               style: GoogleFonts.roboto(
                   fontSize: 35,
                   fontWeight: FontWeight.w600,
@@ -40,7 +44,7 @@ class MyAppBar extends StatelessWidget {
             ),
             child: ClipOval(
               child: Image.asset(
-                "lib/images/apiens_1.png",
+                authController.user.avatar!,
                 fit: BoxFit.cover,
               ),
             ),

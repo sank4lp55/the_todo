@@ -2,14 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:the_todo/controllers/auth_controller.dart';
 import 'package:the_todo/homescreen.dart';
 import 'package:the_todo/utils/fade_in_button.dart';
 import 'package:provider/provider.dart';
 
 import 'controllers/select_avatar_controller.dart';
 
+
 class SelectAvatarScreen extends StatefulWidget {
-  const SelectAvatarScreen({super.key});
+  final String name;
+
+
+  const SelectAvatarScreen({super.key, required this.name});
 
   @override
   State<SelectAvatarScreen> createState() => _SelectAvatarScreenState();
@@ -17,17 +22,19 @@ class SelectAvatarScreen extends StatefulWidget {
 
 class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
   int selectedAvatar = -1;
+  String image = "";
 
   @override
   Widget build(BuildContext context) {
-    final onboardingController = Provider.of<SelectAvatarController>(context);
-    print(onboardingController.index);
+    final selectAvatarController = Provider.of<SelectAvatarController>(context);
+    final authController = Provider.of<AuthController>(context);
+    print(selectAvatarController.index);
 
     return WillPopScope(
       onWillPop: () async {
         // You can add custom logic here, like showing a confirmation dialog.
         print("poppppeddd");
-        onboardingController.setIndex(index: -1);
+        selectAvatarController.setIndex(index: -1);
         return true; // Allow the pop
       },
       child: Scaffold(
@@ -46,7 +53,14 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
                 onTap: () {
                   // Action when 'Skip' is pressed
                   print('Skip pressed');
-                  // You can also navigate or perform another action here
+                  authController.createUser(name: "",avatar: "lib/images/img_5.png");
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Homescreen(), // The screen to navigate to
+                    ),
+                        (Route<dynamic> route) => false, // This condition removes all routes from the stack
+                  );
                 },
                 child: Center(
                   child: Text(
@@ -93,13 +107,15 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
                 ],
               ),
               Spacer(flex: 1),
-              FadeInButtonDemo(isVisible: onboardingController.index > -1,
+              FadeInButtonDemo(isVisible: selectAvatarController.index > -1,
                 onTap: (){
-                  Navigator.push(
+                  authController.createUser(name: widget.name,avatar: selectAvatarController.avatarUrl);
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Homescreen(), // Specify the screen to navigate to
+                      builder: (context) => Homescreen(), // The screen to navigate to
                     ),
+                        (Route<dynamic> route) => false, // This condition removes all routes from the stack
                   );
                 },
               ),
@@ -112,9 +128,8 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
   }
 
   Widget avatar({required int index}) {
-    final onboardingController = Provider.of<SelectAvatarController>(context);
+    final selectAvatarController = Provider.of<SelectAvatarController>(context);
     double w = MediaQuery.of(context).size.width;
-    String image = "";
     if (index == 0) {
       image = "lib/images/img_5.png";
     } else if (index == 1) {
@@ -124,17 +139,17 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
     } else if (index == 3) {
       image = "lib/images/img_1.png";
     }
+
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: InkWell(
         borderRadius: BorderRadius.circular((w / 2 - 60) / 2),
         onTap: () {
-          setState(() {
-            selectedAvatar = index;
-          });
-          onboardingController.setIndex(index: index);
+
+          print(image);
+          selectAvatarController.setIndex(index: index);
           if (kDebugMode) {
-            print("selected index -> ${onboardingController.index}");
+            print("selected index -> ${selectAvatarController.index}");
           }
         },
         child: Container(
@@ -143,7 +158,7 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: selectedAvatar == index ? Colors.greenAccent : Colors.grey[700]!,
+              color: selectAvatarController.index == index ? Colors.greenAccent : Colors.grey[700]!,
               width: 1.0, // You can adjust the width as needed
             ),
           ),
