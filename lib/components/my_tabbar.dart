@@ -21,7 +21,7 @@ class MyTabBar extends StatelessWidget {
 
           unselectedLabelColor: Colors.white60,
           labelStyle: TextStyle(fontSize: 27, color: Colors.white),
-          indicatorColor: Color(0xffE0E541),
+          indicatorColor: Colors.redAccent,
           //isScrollable: true,
           tabs: [
             Tab(

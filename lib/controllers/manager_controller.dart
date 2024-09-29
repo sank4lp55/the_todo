@@ -38,14 +38,14 @@ class TodoProvider with ChangeNotifier {
   }
 
   void checkBoxTapped({bool? value, int index=1}) {
-    db.toDoList[index][1] = !db.toDoList[index][1]; // Toggle the completed state
+    db.toDoList[index][2] = !db.toDoList[index][2]; // Toggle the completed state
     db.updateData("TODOLIST"); // Update the data in the database
     toDoList=db.toDoList;
     notifyListeners(); // Notify listeners about the change
   }
 
-  void onSave(String taskText, BuildContext context) {
-    db.toDoList.add([taskText, false]); // Add new task
+  void onSave(String taskTitle,String taskDescription,String date,String priority, BuildContext context) {
+    db.toDoList.add([taskTitle,taskDescription, false,date,priority]); // Add new task
     db.updateData("TODOLIST"); // Update the data in the database
     toDoList=db.toDoList;
     notifyListeners(); // Notify listeners about the change
@@ -60,7 +60,7 @@ class TodoProvider with ChangeNotifier {
       builder: (context) {
         return DialogBox(
           controller: controller,
-          onSave: () => onSave(controller.text, context),
+          onSave: () => onSave(controller.text,"","","", context),
           onCancel: () => Navigator.of(context).pop(),
         );
       },

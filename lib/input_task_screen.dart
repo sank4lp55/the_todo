@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:the_todo/utils/fade_in_button.dart';
 import 'components/custom_text_field.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'controllers/manager_controller.dart'; // Ensure you import your CustomTextField widget
 
 class InputTaskScreen extends StatefulWidget {
@@ -18,6 +19,13 @@ class _InputTaskScreenState extends State<InputTaskScreen> {
 
   // List of priorities
   final List<String> priorities = ['High', 'Medium', 'Low'];
+
+  String formatDate(DateTime? date) {
+    if (date == null) {
+      return ''; // Return empty if the date is null
+    }
+    return DateFormat('d MMM, yy').format(date); // Format to '26 Sept, 24'
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -61,7 +69,7 @@ class _InputTaskScreenState extends State<InputTaskScreen> {
     print('Deadline: $_selectedDate');
     print('Priority: $_selectedPriority');
 
-    todoProvider.onSave(title, context);
+    todoProvider.onSave(title,description,formatDate(_selectedDate),_selectedPriority??'Low', context);
   }
 
   void _showErrorMessage(String message) {

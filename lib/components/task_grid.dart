@@ -3,17 +3,22 @@ import 'package:provider/provider.dart';
 import 'package:the_todo/components/task_screen.dart';
 
 import '../controllers/manager_controller.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TaskGrid extends StatelessWidget {
   final int index; // Declare index as a final variable
   final String heading;
   final String date;
+  final String? priority;
+  final String? description;
 
   const TaskGrid({
     super.key,
     required this.index,
     required this.heading,
     required this.date,
+    this.priority,
+    this.description,
   }); // Accept index in the constructor
 
   @override
@@ -29,8 +34,9 @@ class TaskGrid extends StatelessWidget {
             return TaskScreen(
               task: heading,
               date: date,
+              description: description,
               color: index == 0
-                  ? Color(0xffE0E541)
+                  ?  Colors.grey
                   : (index % 3 == 0)
                   ? Colors.grey
                   : Colors.grey[200],
@@ -42,11 +48,11 @@ class TaskGrid extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: index == 0
-              ? Color(0xffE0E541)
+              ? Colors.grey
               : (index % 3 == 0)
               ? Colors.grey[400]
               : Colors.grey[200],
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -76,46 +82,45 @@ class TaskGrid extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 // Task date
+
+                SizedBox(height: 8),
+                // Task date
                 Text(
-                  date,
-                  style: TextStyle(
-                    color: Colors.grey[600],
+                  "Priority: ${priority}",
+                  style: GoogleFonts.montserrat(
                     fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
                   ),
                 ),
                 SizedBox(height: 12),
                 // Circular image
-                Container(
-                  height: 35,
-                  width: 35,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.grey[300]!,
-                      width: 1.0,
-                    ),
-                  ),
-                  child: ClipOval(
-                    child: Image.asset(
-                      "lib/images/apiens_1.png",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+
               ],
             ),
             // PNG image in the top-right corner (optional based on condition)
             Positioned(
               top: 5,
-              right: 5,
+              right: 0,
               child: (index < todoProvider.toDoList.length &&
-                  todoProvider.toDoList[index][1])
+                  todoProvider.toDoList[index][2])
                   ? Image.asset(
                 'lib/images/accept.png',
                 height: 15,
               )
                   : SizedBox.shrink(),
+            ),
+            Positioned(
+              top: 5,
+              left: 0,
+              child:    Text(
+                date,
+                style: GoogleFonts.montserrat(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey[700],
+                ),
+              ),
             ),
           ],
         ),

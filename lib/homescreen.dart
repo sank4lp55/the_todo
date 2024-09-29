@@ -30,7 +30,7 @@ class _HomescreenState extends State<Homescreen> {
 
   // tab options
   List tabOption = [
-    ["All Notes", RecentTab()],
+    ["All Tasks", RecentTab()],
     ["Work", TrendingTab()],
     ["Home", TopTab()],
   ];

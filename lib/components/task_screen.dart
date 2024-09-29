@@ -4,10 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../controllers/manager_controller.dart';
+import '../utils/fade_in_button.dart';
 
 class TaskScreen extends StatefulWidget {
   final String task;
   final String date;
+  final String? description;
   final Color? color;
   final int index;
 
@@ -15,6 +17,7 @@ class TaskScreen extends StatefulWidget {
     super.key,
     required this.task,
     required this.date,
+    this.description,
     this.color,
     required this.index,
   });
@@ -28,12 +31,14 @@ class _TaskScreenState extends State<TaskScreen> {
   Widget build(BuildContext context) {
     final todoProvider = Provider.of<TodoProvider>(context);
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: widget.color ?? Colors.white, // Fallback to white if no color is provided
-      content: Container(
-        height: 450,
-        width: double.maxFinite, // Make the container full width
+      backgroundColor: widget.color,
+      contentPadding: EdgeInsets.all(16.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0), // Adjust the radius here
+      ),
+      content: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min, // Take as much space as needed
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,26 +46,28 @@ class _TaskScreenState extends State<TaskScreen> {
                 // Image in the top left
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: (widget.index < todoProvider.toDoList.length && todoProvider.toDoList[widget.index][1])?Image.asset(
+                  child: (widget.index < todoProvider.toDoList.length &&
+                      todoProvider.toDoList[widget.index][2])
+                      ? Image.asset(
                     'lib/images/accept.png', // Path to your image
                     height: 25, // Adjust height as needed
-                  ):SizedBox.shrink(),
+                  )
+                      : const SizedBox.shrink(),
                 ),
                 // Close icon in the top right
                 IconButton(
-                  icon: Icon(Icons.close, color: Colors.black), // Close icon
+                  icon: const Icon(Icons.close, color: Colors.black),
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
                   },
                 ),
               ],
             ),
-            Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Text(
                 widget.task,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -72,69 +79,65 @@ class _TaskScreenState extends State<TaskScreen> {
               padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: Text(
                 widget.date,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
-                  color: Colors.grey[600],
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-            Spacer(), // Pushes the buttons to the bottom
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black, // Button color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0), // Rounded corners
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0), // Button padding
-                  ),
-                  onPressed: () {
-                    todoProvider.checkBoxTapped(index: widget.index);
-                    Fluttertoast.showToast(msg:"Updated the task status!");
-                  },
-                  child: Text(
-                    (widget.index < todoProvider.toDoList.length && todoProvider.toDoList[widget.index][1])?'Not Done':'Done',
-                    style: TextStyle(
-                      color: Colors.white, // Text color
-                      fontSize: 14.0, // Text size
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red, // Button color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0), // Rounded corners
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0), // Button padding
-                  ),
-                  onPressed: () {
-                    if (widget.index < todoProvider.toDoList.length) {
-                      todoProvider.deleteTask(widget.index); // Delete task first
-                    }
-                    Fluttertoast.showToast(msg:"Deleted the task!");
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min, // To fit the icon and text
-                    children: [
-                      Icon(Icons.delete, color: Colors.white), // Delete icon
-                      SizedBox(width: 5), // Space between icon and text
-                      Text(
-                        'Delete',
-                        style: TextStyle(
-                          color: Colors.white, // Text color
-                          fontSize: 14.0, // Text size
-                        ),
+             SizedBox(
+              height: 200, // Set a fixed height for the text area
+              child: Scrollbar(
+                thumbVisibility: true, // Make the scrollbar always visible
+                thickness: 4, // Adjust thickness for the scrollbar thumb
+                radius: Radius.circular(8), // Make the thumb rounded (optional)
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                    child: Text(
+                      widget.description??"",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
                       ),
-                    ],
+                      maxLines: 8, // Limit to 8 lines
+                      overflow: TextOverflow.ellipsis, // Add ellipsis if overflowed
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ],
+              ),
+            ),
+            FadeInButtonDemo(
+              titleColor: widget.color==Colors.grey? Colors.black:Colors.white,
+              buttonColor:widget.color==Colors.grey? Colors.white70:Colors.grey,
+              borderColor:widget.color==Colors.grey? Colors.white70:Colors.grey,
+              isVisible: true,
+              title: (widget.index < todoProvider.toDoList.length &&
+                  todoProvider.toDoList[widget.index][2])
+                  ? 'Not Done'
+                  : 'Done',
+              onTap: () {
+                todoProvider.checkBoxTapped(index: widget.index);
+                Fluttertoast.showToast(msg: "Updated the task status!");
+              },
+            ),
+            const SizedBox(height: 10),
+            FadeInButtonDemo(
+              buttonColor: Colors.transparent,
+              borderColor:widget.color==Colors.grey? Colors.white70:Colors.grey,
+
+              isVisible: true,
+              title: "Delete",
+              onTap: () {
+                if (widget.index < todoProvider.toDoList.length) {
+                  todoProvider.deleteTask(widget.index); // Delete task first
+                }
+                Fluttertoast.showToast(msg: "Deleted the task!");
+                Navigator.of(context).pop(); // Close the dialog
+              },
             ),
           ],
         ),

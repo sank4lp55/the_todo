@@ -14,11 +14,11 @@ class RecentTab extends StatelessWidget {
     return SafeArea(
 
         child: Scaffold(
-          backgroundColor: Color(0xff1C1C1C),
+          backgroundColor: const Color(0xff1C1C1C),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // 2 columns
             crossAxisSpacing: 10.0,
             mainAxisSpacing: 10.0,
@@ -29,7 +29,9 @@ class RecentTab extends StatelessWidget {
             return TaskGrid(
               index: index,
               heading: todoProvider.toDoList[index][0],
-              date: "Sept 28, 2024",
+              description:todoProvider.toDoList[index][1],
+              date: todoProvider.toDoList[index][3],
+              priority: todoProvider.toDoList[index][4],
             );
           },
         ),
